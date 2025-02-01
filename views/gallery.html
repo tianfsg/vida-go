@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="{{.data.Lang}}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{.data.Title}}</title>
+        <meta name="description" content="{{.data.Description}}" />
+        <meta name="keywords" content="{{.data.Keywords}}" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css"
+            rel="stylesheet"
+        />
+        <link href="static/css/styles.css" rel="stylesheet" />
+    </head>
+    <body
+        class="main-content text-white"
+        style="min-height: 100vh; display: flex; flex-direction: column"
+    >
+        <!-- Navbar -->
+        <header
+            class="fixed top-0 left-0 w-full z-30 bg-gray-900 bg-opacity-90 flex justify-between items-center p-4 shadow-lg"
+        >
+            <div class="text-3xl font-bold">{{.data.SiteName}}</div>
+
+            <!-- Menu Icon for mobile -->
+            <div class="md:hidden">
+                <button
+                    id="menuButton"
+                    aria-expanded="false"
+                    aria-controls="menu"
+                    class="focus:outline-none"
+                >
+                    <svg
+                        class="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Menu Links -->
+            <nav
+                id="menu"
+                class="hidden md:flex flex-1 justify-center space-x-8"
+                role="navigation"
+            >
+                <a
+                    href="#home"
+                    class="hover:text-gray-300"
+                    aria-label="Home Section"
+                    >{{.data.MenuHome}}</a
+                >
+                <a
+                    href="#portfolio"
+                    class="hover:text-gray-300"
+                    aria-label="Portfolio Section"
+                    >{{.data.MenuPortfolio}}</a
+                >
+                <a
+                    href="#art"
+                    class="hover:text-gray-300"
+                    aria-label="Art Section"
+                    >{{.data.MenuArt}}</a
+                >
+                <a
+                    href="#contact"
+                    class="hover:text-gray-300"
+                    aria-label="Contact Section"
+                    >{{.data.MenuContact}}</a
+                >
+            </nav>
+
+            <!-- Language Button -->
+            <div class="relative">
+                <button
+                    id="languageButton"
+                    class="custom-language-btn flex items-center space-x-1 text-white rounded-lg"
+                    aria-label="Language Selection"
+                >
+                    <img
+                        src="/static/images/flags/{{.data.Lang}}/24.png"
+                        alt="{{.data.Lang}}"
+                        class="w-5 h-5"
+                    />
+                    <span>{{.data.Lang}}</span>
+                </button>
+                <!-- Language Dropdown Menu -->
+                <div
+                    id="languageMenu"
+                    class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg overflow-hidden z-50"
+                >
+                    <a
+                        href="?lang=EN"
+                        class="flex items-center px-4 py-2 hover:bg-gray-200"
+                    >
+                        <img
+                            src="/static/images/flags/EN/24.png"
+                            alt="English"
+                            class="w-5 h-5 mr-2"
+                        />
+                        <span class="text-black">English</span>
+                    </a>
+                    <a
+                        href="?lang=ES"
+                        class="flex items-center px-4 py-2 hover:bg-gray-200"
+                    >
+                        <img
+                            src="/static/images/flags/ES/24.png"
+                            alt="Español"
+                            class="w-5 h-5 mr-2"
+                        />
+                        <span class="text-black">Español</span>
+                    </a>
+                    <a
+                        href="?lang=DE"
+                        class="flex items-center px-4 py-2 hover:bg-gray-200"
+                    >
+                        <img
+                            src="/static/images/flags/DE/24.png"
+                            alt="Deutsch"
+                            class="w-5 h-5 mr-2"
+                        />
+                        <span class="text-black">Deutsch</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Gallery Content -->
+        <main class="gallery-container">
+            {{range .photos}}
+            <div class="photo-item">
+                <img src="{{.}}" alt="Photo" class="photo" />
+            </div>
+            {{end}}
+        </main>
+
+        <div>
+            <!-- Curva superior -->
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1200 100"
+                preserveAspectRatio="none"
+                style="
+                    display: block;
+                    width: 100vw;
+                    height: 100px;
+                    transform: scaleX(-1);
+                "
+            >
+                <path
+                    d="M0,40 Q300,80 600,40 Q900,0 1200,40 L1200,100 L0,100 Z"
+                    fill="#1a202c"
+                ></path>
+            </svg>
+        </div>
+
+        <!-- Footer -->
+        <footer
+            class="bg-gray-900 text-gray-400 py-12 px-6 text-center shadow-md w-full"
+            style="padding: 2rem 2rem; background: #1a202c"
+        >
+            <!-- Sección de Contacto con Tarjeta Flotante -->
+            <section
+                id="contact"
+                class="w-full flex justify-center items-center"
+                style="margin-bottom: 0px"
+            >
+                <div
+                    class="max-w-4xl bg-gray-900 bg-opacity-80 rounded-lg shadow-lg p-8 text-white"
+                >
+                    <div class="w-full text-center">
+                        <h2 class="text-3xl font-bold mb-2">
+                            {{.data.ContactTitle}}
+                        </h2>
+                        <p class="text-lg mb-4">{{.data.ContactSubtitle}}</p>
+                        <p class="text-base">
+                            <strong>{{.data.EmailLabel}}</strong>
+                            <a
+                                href="mailto:contact@vida.guide"
+                                class="text-yellow-400"
+                                >contact@vida.guide</a
+                            ><br />
+                        </p>
+                        <div class="flex justify-center space-x-4 mt-6">
+                            <a
+                                href="https://github.com/tianfsg"
+                                target="_blank"
+                                class="text-yellow-400 hover:text-white transition"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.21.68-.48v-1.7c-2.78.61-3.37-1.33-3.37-1.33-.45-1.15-1.1-1.45-1.1-1.45-.9-.61.07-.6.07-.6 1 .08 1.53 1.04 1.53 1.04.89 1.52 2.33 1.08 2.9.82.09-.65.35-1.08.64-1.33-2.22-.25-4.55-1.11-4.55-4.96 0-1.1.39-1.99 1.02-2.7-.1-.26-.44-1.3.1-2.7 0 0 .84-.27 2.75 1.03a9.58 9.58 0 015 0c1.9-1.3 2.75-1.03 2.75-1.03.54 1.41.2 2.44.1 2.7.63.71 1.02 1.6 1.02 2.7 0 3.86-2.33 4.71-4.55 4.96.36.31.68.92.68 1.85v2.74c0 .28.18.59.69.48A10.02 10.02 0 0012 2z"
+                                    />
+                                </svg>
+                            </a>
+                            <a
+                                href="https://linkedin.com/in/seguro"
+                                target="_blank"
+                                class="text-yellow-400 hover:text-white transition"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M16.5 8a6.27 6.27 0 00-4.5 1.9A6.27 6.27 0 007.5 8C5.2 8 4 10.14 4 12.5v7a.5.5 0 00.5.5h3a.5.5 0 00.5-.5v-7c0-.88.36-2.5 2.5-2.5s2.5 1.62 2.5 2.5v7a.5.5 0 00.5.5h3a.5.5 0 00.5-.5v-7c0-2.36-1.2-4.5-3.5-4.5zm-.5 9h-3v-7c0-.22-.18-2.5-2.5-2.5-2.32 0-2.5 2.28-2.5 2.5v7h-3v-7C4 10.36 4.36 8 7.5 8c2.82 0 3.5 2.68 3.5 4.5v7h3v-7c0-1.82.68-4.5 3.5-4.5 2.82 0 3.5 2.68 3.5 4.5v7a.5.5 0 00.5.5h3a.5.5 0 00.5-.5v-7C24 10.14 22.8 8 20.5 8A6.27 6.27 0 0016.5 8z"
+                                    />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="container mx-auto px-4">
+                <div
+                    class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+                >
+                    <!-- Link Section -->
+                    <div id="terms" class="flex space-x-4">
+                        <a href="/privacy" class="hover:text-white"
+                            >{{.data.FooterPrivacy}}</a
+                        >
+                        <a href="/cookies" class="hover:text-white"
+                            >{{.data.FooterCookies}}</a
+                        >
+                        <a href="/terms" class="hover:text-white"
+                            >{{.data.FooterTerms}}</a
+                        >
+                        <a href="/legal-notice" class="hover:text-white"
+                            >{{.data.FooterLegal}}</a
+                        >
+                    </div>
+                    <!-- Signature -->
+                    <div class="text-center md:text-right">
+                        <p>
+                            {{.data.FooterSignature}}
+                            <span class="font-bold"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script src="/static/js/menu.js"></script>
+    </body>
+</html>
