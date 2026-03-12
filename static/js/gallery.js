@@ -1,69 +1,72 @@
-// gallery.js — infinite scroll for the photo gallery
-
 (function () {
   let offset = 0;
   let loading = false;
   let exhausted = false;
 
-  const loader = document.getElementById('loader');
-  const container = document.getElementById('photo-container');
+  const loader = document.getElementById("loader");
+  const container = document.getElementById("photo-container");
+
+  function appendPhotos(photos) {
+    photos.forEach((photo) => {
+      const item = document.createElement("div");
+      item.className = "photo-item";
+      const img = document.createElement("img");
+      img.src = photo.URL;
+      img.alt = "Photo";
+      img.loading = "lazy";
+      if (photo.WebP) {
+        const picture = document.createElement("picture");
+        const source = document.createElement("source");
+        source.srcset = photo.WebP;
+        source.type = "image/webp";
+        picture.appendChild(source);
+        picture.appendChild(img);
+        item.appendChild(picture);
+      } else {
+        item.appendChild(img);
+      }
+      container.appendChild(item);
+    });
+  }
 
   function loadPhotos() {
     if (loading || exhausted) return;
     loading = true;
-
-    if (loader) loader.style.display = 'block';
+    loader.style.display = "block";
 
     fetch(`/photos?offset=${offset}`)
-      .then(response => response.json())
-      .then(data => {
+      .then((r) => r.json())
+      .then((data) => {
         const photos = data.photos || [];
-
         if (photos.length === 0) {
           exhausted = true;
+          loader.style.display = "none";
           return;
         }
-
-        photos.forEach(photo => {
-          const item = document.createElement('div');
-          item.classList.add('photo-item');
-
-          const picture = document.createElement('picture');
-
-          if (photo.WebP) {
-            const source = document.createElement('source');
-            source.srcset = photo.WebP;
-            source.type = 'image/webp';
-            picture.appendChild(source);
-          }
-
-          const img = document.createElement('img');
-          img.src = photo.URL;
-          img.alt = 'Photo';
-          img.loading = 'lazy';
-          img.classList.add('photo');
-
-          picture.appendChild(img);
-          item.appendChild(picture);
-          container.appendChild(item);
-        });
-
+        appendPhotos(photos);
         offset = data.offset;
-      })
-      .catch(err => console.error('Error loading photos:', err))
-      .finally(() => {
+        loader.style.display = "none";
         loading = false;
-        if (loader) loader.style.display = 'none';
+      })
+      .catch((err) => {
+        console.error("Error loading photos:", err);
+        loader.style.display = "none";
+        loading = false;
       });
   }
 
-  // Load more when near bottom
-  window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+  window.addEventListener("scroll", () => {
+    if (exhausted || loading) return;
+    const threshold = 300;
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - threshold) {
       loadPhotos();
     }
   });
 
-  // Initial load
-  loadPhotos();
+  // Initial load — don't load again if server already rendered photos
+  if (container.children.length === 0) {
+    loadPhotos();
+  } else {
+    offset = container.children.length;
+  }
 })();

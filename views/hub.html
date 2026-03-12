@@ -31,7 +31,7 @@
                 </svg>
             </div>
             <h2 class="text-lg font-semibold group-hover:text-yellow-400 transition">{{.data.MenuPortfolio}}</h2>
-            <p class="text-xs text-gray-400 mt-1">Skills, journey & experience</p>
+            <p class="text-xs text-gray-400 mt-1">{{.data.MenuPortfolioText}}</p>
         </a>
 
         <a href="/gallery" class="group bg-gray-800 hover:bg-gray-700 transition-all duration-200 rounded-2xl p-6 border border-gray-700 hover:border-yellow-400 shadow-md text-center">
@@ -41,18 +41,19 @@
                 </svg>
             </div>
             <h2 class="text-lg font-semibold group-hover:text-yellow-400 transition">{{.data.MenuArt}}</h2>
-            <p class="text-xs text-gray-400 mt-1">Photography collection</p>
+            <p class="text-xs text-gray-400 mt-1">{{.data.MenuArtText}}</p>
         </a>
 
-        <a href="/talk" class="group bg-gray-800 hover:bg-gray-700 transition-all duration-200 rounded-2xl p-6 border border-gray-700 hover:border-yellow-400 shadow-md text-center">
+        <!-- Contact card — opens modal -->
+        <button id="openContactModal" class="group bg-gray-800 hover:bg-gray-700 transition-all duration-200 rounded-2xl p-6 border border-gray-700 hover:border-yellow-400 shadow-md text-center w-full">
             <div class="flex justify-center mb-3 text-yellow-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                 </svg>
             </div>
             <h2 class="text-lg font-semibold group-hover:text-yellow-400 transition">{{.data.MenuContact}}</h2>
-            <p class="text-xs text-gray-400 mt-1">Get in touch</p>
-        </a>
+            <p class="text-xs text-gray-400 mt-1">{{.data.MenuContactText}}</p>
+        </button>
     </div>
 
     <!-- Language switcher -->
@@ -75,6 +76,59 @@
             <span class="text-sm">DE</span>
         </a>
     </div>
+
+    <!-- Contact modal -->
+    <div id="contactModal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4"
+        style="background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);">
+        <div class="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
+            <button id="closeContactModal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2 class="text-xl font-bold text-white mb-1">{{.data.ContactTitle}}</h2>
+            <p class="text-gray-400 text-sm mb-6">{{.data.ContactSubtitle}}</p>
+            <div class="space-y-3">
+                <a href="mailto:sebastianfrancisco121@gmail.com"
+                    class="flex items-center space-x-3 w-full bg-gray-700 hover:bg-gray-600 transition rounded-xl px-4 py-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="text-sm text-gray-200">sebastianfrancisco121@gmail.com</span>
+                </a>
+                <a href="https://linkedin.com/in/seguro" target="_blank" rel="noopener noreferrer"
+                    class="flex items-center space-x-3 w-full bg-gray-700 hover:bg-gray-600 transition rounded-xl px-4 py-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <span class="text-sm text-gray-200">linkedin.com/in/seguro</span>
+                </a>
+                <button id="hubCalendarBtn"
+                    class="flex items-center justify-center space-x-2 w-full bg-yellow-400 hover:bg-yellow-300 transition rounded-xl px-4 py-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="text-sm font-semibold text-gray-900">{{.data.TalkButton}}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var calUrl = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0UStehnLwg9rWRTnWX2fsbCV1ddLmHPsf19-5nYwyaILc42i4Ur03HZiyDCQWsySYhqsThPAYz?gv=true";
+    document.getElementById("openContactModal").addEventListener("click", function() {
+        document.getElementById("contactModal").classList.remove("hidden");
+    });
+    document.getElementById("closeContactModal").addEventListener("click", function() {
+        document.getElementById("contactModal").classList.add("hidden");
+    });
+    document.getElementById("contactModal").addEventListener("click", function(e) {
+        if (e.target === this) this.classList.add("hidden");
+    });
+    document.getElementById("hubCalendarBtn").addEventListener("click", function() {
+        window.open(calUrl, "popup", "width=600,height=600");
+    });
+    </script>
 
 </body>
 </html>
