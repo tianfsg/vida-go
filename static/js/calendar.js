@@ -1,23 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("calendarButton.js loaded"); // Confirma que el archivo se carga correctamente
+function initCalendar() {
+  var btn = document.getElementById("openCalendarButton");
+  if (!btn) return;
+  var newBtn = btn.cloneNode(true);
+  btn.parentNode.replaceChild(newBtn, btn);
+  newBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    var url = this.dataset.calendarUrl;
+    if (url) window.open(url, "popup", "width=600,height=600");
+  });
+}
 
-  var openButton = document.getElementById("openCalendarButton");
-
-  if (openButton) {
-    openButton.addEventListener("click", function (event) {
-      event.preventDefault();
-
-      // Obtener la URL desde el atributo data-calendar-url
-      var calendarUrl = openButton.dataset.calendarUrl;
-
-      if (calendarUrl) {
-        // Abrir una ventana emergente con las dimensiones especificadas
-        window.open(calendarUrl, "popup", "width=600,height=600");
-      } else {
-        console.error("Calendar URL not found in data attribute");
-      }
-    });
-  } else {
-    console.error("openCalendarButton not found");
-  }
-});
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initCalendar);
+} else {
+  initCalendar();
+}

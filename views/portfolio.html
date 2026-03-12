@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="{{.language}}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{.data.Title}}</title>
+        <meta name="description" content="{{.data.Description}}" />
+        <meta name="keywords" content="{{.data.Keywords}}" />
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" />
+        <link href="/static/css/styles.css" rel="stylesheet" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon/icons8-visible-3d-fluency-16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon/icons8-visible-3d-fluency-32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/images/favicon/icons8-visible-3d-fluency-96.png" />
+        <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/static/images/favicon/apple-touch-icon.png" />
+        <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    </head>
+    <body class="gradient-background text-white">
+
+        {{template "navbar-portfolio" .}}
+
+        <!-- Main Content -->
+        <main id="home" class="flex flex-col items-center space-y-4 py-12 pt-8 md:pt-48 px-4">
+
+            <!-- Section 1: About Me -->
+            <section class="flex flex-col items-center justify-center py-0 md:py-11">
+                <div
+                    class="bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-lg flex flex-col-reverse md:flex-row items-center justify-between text-center md:text-left space-y-8 md:space-y-0 mx-auto"
+                    style="min-width: 300px; max-width: 1200px; width: 100%; min-height: 410px;"
+                >
+                    <div class="md:w-1/2 pl-4 pr-4 md:pl-8">
+                        <h1 class="text-2xl md:text-4xl font-bold about-header text-white" style="padding-top: 1rem">
+                            {{.data.Header}}
+                        </h1>
+                        <h2 class="text-4xl md:text-6xl font-bold text-white name mt-2 md:mt-4">
+                            {{.data.Name}}
+                        </h2>
+                        <h3 class="text-xl md:text-3xl text-yellow-400 role mt-1 md:mt-2">
+                            {{.data.Role}}
+                        </h3>
+                        <p class="text-sm sm:text-base md:text-lg text-white max-w-md description mt-2 md:mt-4 text-justify sm:text-left" style="padding-bottom: 0.5rem">
+                            {{.data.AboutDescription}}
+                        </p>
+                        <div id="button-group">
+                            <button
+                                id="cv-button"
+                                data-lang="{{.language}}"
+                                class="inline-block bg-yellow-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg shadow hover:bg-yellow-400 transition cv-button"
+                                style="color: #1a202c; margin-right: 0.5rem"
+                            >
+                                {{.data.PreviewCV}}
+                            </button>
+                            <a
+                                id="openCalendarButton"
+                                href="#"
+                                class="inline-block text-white px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-lg hover:bg-red-700 transition talk-button mt-4 md:mt-0"
+                                style="border: 2px solid white"
+                                data-calendar-url="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0UStehnLwg9rWRTnWX2fsbCV1ddLmHPsf19-5nYwyaILc42i4Ur03HZiyDCQWsySYhqsThPAYz?gv=true"
+                            >
+                                {{.data.TalkButton}}
+                            </a>
+                        </div>
+
+                        <!-- Calendar Modal -->
+                        <div id="calendarModal" class="fixed inset-0 items-center justify-center bg-black bg-opacity-50 hidden z-50">
+                            <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+                                <button id="closeCalendarButton" class="float-right text-gray-700 hover:text-gray-900">&times;</button>
+                                <div id="calendarContainer" class="mt-4">
+                                    <iframe
+                                        src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0UStehnLwg9rWRTnWX2fsbCV1ddLmHPsf19-5nYwyaILc42i4Ur03HZiyDCQWsySYhqsThPAYz?gv=true"
+                                        frameborder="0"
+                                        style="width: 100%; height: 400px"
+                                    ></iframe>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- hCaptcha Overlay -->
+                        <div id="hcaptcha-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;">
+                            <div id="hcaptcha-container" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:15px;border-radius:10px;max-width:90%;width:auto;text-align:center;display:inline-block;">
+                                <button id="close-overlay" style="position:absolute;top:-10px;right:-10px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:hsla(0,0%,75%,1);">&times;</button>
+                                <div class="h-captcha" data-sitekey="{{.data.SiteKey}}" data-callback="onCaptchaSuccess"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:w-1/2 flex justify-center md:justify-end pr-4 md:pl-5 mb-4 md:mb-0">
+                        <div class="relative">
+                            <img
+                                src="/static/images/profile.jpeg"
+                                alt="Profile photo of {{.data.Name}}"
+                                class="w-45 h-45 md:w-70 md:h-70 rounded-full shadow-lg"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Curve into Journey -->
+            <svg id="journey" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100" preserveAspectRatio="none"
+                style="display:block;width:100vw;height:100px;margin-bottom:-1px;">
+                <path d="M0,40 Q300,80 600,40 Q900,0 1200,40 L1200,100 L0,100 Z" fill="#1a202c"/>
+            </svg>
+
+            <!-- Section: My Journey -->
+            <section id="my-journey" class="w-screen text-white pt-4 pb-12 flex justify-center"
+                style="background:#1a202c;position:relative;overflow:hidden;margin-top:0px;">
+                <div class="max-w-7xl w-full px-4 z-10">
+                    <h2 class="text-4xl font-bold mb-12 text-center text-white">{{.data.JourneyTitle}}</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                        <!-- Left: Education + Certifications -->
+                        <div class="space-y-6">
+                            <!-- Education -->
+                            <div>
+                                <h3 class="text-2xl font-semibold mb-4 text-white education-title">{{.data.EducationTitle}}</h3>
+                                <div class="space-y-4">
+                                    <div class="education-item p-6 rounded-lg shadow-lg"
+                                        style="background:linear-gradient(130deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                        <h4 class="text-xl font-bold text-white">{{.data.EducationItemTitle}}</h4>
+                                        <p class="text-gray-200 mt-1">{{.data.EducationItemDesc}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Certifications -->
+                            <div>
+                                <h3 class="text-2xl font-semibold mb-4 text-white">{{.data.CertificationsTitle}}</h3>
+                                <div class="space-y-3">
+                                    <div class="p-4 rounded-lg shadow-lg flex items-start space-x-3"
+                                        style="background:linear-gradient(130deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                        </svg>
+                                        <div>
+                                            <h4 class="text-base font-bold text-white">{{.data.Certification1Title}}</h4>
+                                            <p class="text-gray-300 text-sm mt-0.5">{{.data.Certification1Desc}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 rounded-lg shadow-lg flex items-start space-x-3"
+                                        style="background:linear-gradient(130deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                        </svg>
+                                        <div>
+                                            <h4 class="text-base font-bold text-white">{{.data.Certification2Title}}</h4>
+                                            <p class="text-gray-300 text-sm mt-0.5">{{.data.Certification2Desc}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 rounded-lg shadow-lg flex items-start space-x-3"
+                                        style="background:linear-gradient(130deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                        </svg>
+                                        <div>
+                                            <h4 class="text-base font-bold text-white">{{.data.Certification3Title}}</h4>
+                                            <p class="text-gray-300 text-sm mt-0.5">{{.data.Certification3Desc}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Experience -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-white experience-title">{{.data.ExperienceTitle}}</h3>
+                            <div class="space-y-4">
+                                <div class="experience-item p-6 rounded-lg shadow-lg"
+                                    style="background:linear-gradient(60deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                    <h4 class="text-xl font-bold text-white">{{.data.ExperienceItem1Title}}</h4>
+                                    <p class="text-gray-200 mt-1">{{.data.ExperienceItem1Desc}}</p>
+                                </div>
+                                <div class="experience-item p-6 rounded-lg shadow-lg"
+                                    style="background:linear-gradient(130deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                    <h4 class="text-xl font-bold text-white">{{.data.ExperienceItem2Title}}</h4>
+                                    <p class="text-gray-200 mt-1">{{.data.ExperienceItem2Desc}}</p>
+                                </div>
+                                <div class="experience-item p-6 rounded-lg shadow-lg"
+                                    style="background:linear-gradient(60deg,hsla(230,59%,30%,1) 55%,hsla(359,73%,39%,1) 75%,hsla(32,97%,59%,1) 95%);">
+                                    <h4 class="text-xl font-bold text-white">{{.data.ExperienceItem3Title}}</h4>
+                                    <p class="text-gray-200 mt-1">{{.data.ExperienceItem3Desc}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Curve out of Journey -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100" preserveAspectRatio="none"
+                style="display:block;width:100vw;height:100px;margin-top:-1px;transform:scaleY(-1);">
+                <path d="M0,40 Q300,80 600,40 Q900,0 1200,40 L1200,100 L0,100 Z" fill="#1a202c"/>
+            </svg>
+
+            <!-- Section: My Skills -->
+            <section id="my-skills" class="w-full py-16 px-6">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-4xl font-bold text-center text-white mb-12">{{.data.SkillsTitle}}</h2>
+
+                    <div class="space-y-8">
+                        <!-- IAM -->
+                        <div>
+                            <p class="text-xs font-semibold text-yellow-400 uppercase tracking-widest mb-3">Identity &amp; Access Management</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">One Identity Manager</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">SailPoint ISC</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Active Directory</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">RBAC / Access Control</span>
+                            </div>
+                        </div>
+
+                        <!-- Cloud & DevOps -->
+                        <div>
+                            <p class="text-xs font-semibold text-yellow-400 uppercase tracking-widest mb-3">Cloud &amp; DevOps</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">AWS</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Docker</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Kubernetes</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Jenkins</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Ansible</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Zabbix</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Grafana</span>
+                            </div>
+                        </div>
+
+                        <!-- Data & Backend -->
+                        <div>
+                            <p class="text-xs font-semibold text-yellow-400 uppercase tracking-widest mb-3">Data &amp; Backend</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Python</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Java</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Node.js</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Apache Spark</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Kafka</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">PostgreSQL</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">MongoDB</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">SQL</span>
+                            </div>
+                        </div>
+
+                        <!-- Frontend -->
+                        <div>
+                            <p class="text-xs font-semibold text-yellow-400 uppercase tracking-widest mb-3">Frontend</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">React</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">JavaScript</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">HTML / CSS</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Webflow</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-white">Figma</span>
+                            </div>
+                        </div>
+
+                        <!-- Languages -->
+                        <div>
+                            <p class="text-xs font-semibold text-yellow-400 uppercase tracking-widest mb-3">{{.data.ComplementarySkill4Title}}</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full text-sm bg-yellow-400 text-gray-900 font-semibold">{{.data.ComplementarySkill41}}</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-700 border border-gray-500 text-white">{{.data.ComplementarySkill42}}</span>
+                                <span class="px-3 py-1 rounded-full text-sm bg-gray-800 border border-gray-600 text-gray-400">{{.data.ComplementarySkill43}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        {{template "footer" .}}
+
+        <script src="/static/js/menu.js"></script>
+        <script src="/static/js/lang-switch.js"></script>
+        <script src="/static/js/cv.js"></script>
+        <script src="/static/js/calendar.js"></script>
+    </body>
+</html>

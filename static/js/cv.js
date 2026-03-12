@@ -1,46 +1,43 @@
-let selectedLang = ''; // Variable global para almacenar el idioma seleccionado
-
-// Cuando el captcha es validado correctamente
 function onCaptchaSuccess(token) {
-    // Utilizar la variable global selectedLang para obtener el idioma
-    const cvPath = `/static/content/${selectedLang}-cv.pdf`;
-
-    // Crear un enlace temporal
-    const a = document.createElement('a');
-    a.href = cvPath;
-    a.target = '_blank'; // Abrir en una nueva pestaña
-    a.rel = 'noopener noreferrer'; // Seguridad adicional
-
-    // Agregar el enlace al DOM, hacer clic en él, y luego eliminarlo
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    // Ocultar el overlay después de la verificación
-    document.getElementById('hcaptcha-overlay').style.display = 'none';
+  var lang = window._cvLang || "en";
+  var cvPath = "/static/content/" + lang + "-cv.pdf";
+  var a = document.createElement("a");
+  a.href = cvPath;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  var overlay = document.getElementById("hcaptcha-overlay");
+  if (overlay) overlay.style.display = "none";
 }
 
-// Muestra el captcha flotante cuando se hace clic en el botón de CV
-document.getElementById('cv-button').addEventListener('click', function() {
-    // Establecer el idioma seleccionado en la variable global
-    selectedLang = this.dataset.lang;
+function initCV() {
+  var cvBtn = document.getElementById("cv-button");
+  var overlay = document.getElementById("hcaptcha-overlay");
+  var closeBtn = document.getElementById("close-overlay");
 
-    // Mostrar el overlay y el captcha
-    document.getElementById('hcaptcha-overlay').style.display = 'block';
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Botón "X" que cierra el overlay
-    const closeButton = document.getElementById('close-overlay');
-    const hcaptchaOverlay = document.getElementById('hcaptcha-overlay');
-
-    closeButton.addEventListener('click', function () {
-        hcaptchaOverlay.style.display = 'none';
+  if (cvBtn) {
+    // Clone to remove old listeners
+    var newBtn = cvBtn.cloneNode(true);
+    cvBtn.parentNode.replaceChild(newBtn, cvBtn);
+    newBtn.addEventListener("click", function () {
+      window._cvLang = (this.dataset.lang || "en").toLowerCase();
+      if (overlay) overlay.style.display = "block";
     });
+  }
 
-    // Abrir el overlay al hacer clic en el botón de CV
-    const cvButton = document.getElementById('cv-button');
-    cvButton.addEventListener('click', function () {
-        hcaptchaOverlay.style.display = 'block';
+  if (closeBtn) {
+    var newClose = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newClose, closeBtn);
+    newClose.addEventListener("click", function () {
+      if (overlay) overlay.style.display = "none";
     });
-});
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initCV);
+} else {
+  initCV();
+}
