@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tianfsg/vida-go/static/lang"
+	"github.com/tianfsg/vida-go/lang"
 )
 
 // Photo represents an image with its URL and orientation

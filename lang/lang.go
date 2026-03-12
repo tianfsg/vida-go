@@ -1,4 +1,4 @@
-// vida-go/static/lang/lang.go
+// vida-go/lang/lang.go
 
 package lang
 
@@ -26,6 +26,13 @@ type Language struct {
 	EducationTitle           string             `json:"educationTitle"`
 	EducationItemTitle       string             `json:"educationItemTitle"`
 	EducationItemDesc        string             `json:"educationItemDescription"`
+	CertificationsTitle      string             `json:"certificationsTitle"`
+	Certification1Title      string             `json:"certification1Title"`
+	Certification1Desc       string             `json:"certification1Desc"`
+	Certification2Title      string             `json:"certification2Title"`
+	Certification2Desc       string             `json:"certification2Desc"`
+	Certification3Title      string             `json:"certification3Title"`
+	Certification3Desc       string             `json:"certification3Desc"`
 	ExperienceTitle          string             `json:"experienceTitle"`
 	ExperienceItem1Title     string             `json:"experienceItem1Title"`
 	ExperienceItem1Desc      string             `json:"experienceItem1Description"`

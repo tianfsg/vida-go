@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/tianfsg/vida-go/static/lang"
+	"github.com/tianfsg/vida-go/lang"
 )
 
 type HomeController struct{}

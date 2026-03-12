@@ -1,44 +1,69 @@
-let offset = 0;
-const loader = document.getElementById("loader");
+// gallery.js — infinite scroll for the photo gallery
 
-// Función para cargar más fotos
-function loadPhotos() {
-  loader.style.display = "block";
-  fetch(`/photos?offset=${offset}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Insertar las nuevas fotos
-      const photoContainer = document.getElementById("photo-container");
-      data.photos.forEach((photo) => {
-        const photoElement = document.createElement("div");
-        photoElement.classList.add("photo-item");
-        if (photo.IsWide) {
-          photoElement.classList.add("horizontal");
-        } else {
-          photoElement.classList.add("vertical");
+(function () {
+  let offset = 0;
+  let loading = false;
+  let exhausted = false;
+
+  const loader = document.getElementById('loader');
+  const container = document.getElementById('photo-container');
+
+  function loadPhotos() {
+    if (loading || exhausted) return;
+    loading = true;
+
+    if (loader) loader.style.display = 'block';
+
+    fetch(`/photos?offset=${offset}`)
+      .then(response => response.json())
+      .then(data => {
+        const photos = data.photos || [];
+
+        if (photos.length === 0) {
+          exhausted = true;
+          return;
         }
-        photoElement.innerHTML = `<img src="${photo.URL}" alt="Photo" loading="lazy" />`;
-        photoContainer.appendChild(photoElement);
+
+        photos.forEach(photo => {
+          const item = document.createElement('div');
+          item.classList.add('photo-item');
+
+          const picture = document.createElement('picture');
+
+          if (photo.WebP) {
+            const source = document.createElement('source');
+            source.srcset = photo.WebP;
+            source.type = 'image/webp';
+            picture.appendChild(source);
+          }
+
+          const img = document.createElement('img');
+          img.src = photo.URL;
+          img.alt = 'Photo';
+          img.loading = 'lazy';
+          img.classList.add('photo');
+
+          picture.appendChild(img);
+          item.appendChild(picture);
+          container.appendChild(item);
+        });
+
+        offset = data.offset;
+      })
+      .catch(err => console.error('Error loading photos:', err))
+      .finally(() => {
+        loading = false;
+        if (loader) loader.style.display = 'none';
       });
-
-      // Actualizar el offset
-      offset = data.offset;
-      loader.style.display = "none";
-    })
-    .catch((error) => {
-      console.error("Error loading photos:", error);
-      loader.style.display = "none";
-    });
-}
-
-// Detectar cuando el usuario llega al final de la página
-window.addEventListener("scroll", () => {
-  // Si el usuario está cerca del final de la página, cargar más fotos
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-    // 200px antes del final
-    loadPhotos();
   }
-});
 
-// Cargar las primeras fotos al iniciar
-loadPhotos();
+  // Load more when near bottom
+  window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+      loadPhotos();
+    }
+  });
+
+  // Initial load
+  loadPhotos();
+})();

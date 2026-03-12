@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="{{.language}}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{.data.TermsAndConditions.Title}} — {{.data.SiteName}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="/static/css/styles.css" rel="stylesheet" />
+</head>
+<body class="gradient-background text-white" style="min-height:100vh;display:flex;flex-direction:column">
+    {{template "navbar-legal" .}}
+
+    <main class="flex-grow max-w-4xl mx-auto px-6 py-32 space-y-8">
+        <h1 class="text-4xl font-bold">{{.data.TermsAndConditions.Title}}</h1>
+        <p>{{.data.TermsAndConditions.Content}}</p>
+
+        <section>
+            <h2 class="text-2xl font-semibold mb-2">{{.data.TermsAndConditions.UseOfSite}}</h2>
+            <p>{{.data.TermsAndConditions.UseOfSiteDetails}}</p>
+        </section>
+        <section>
+            <h2 class="text-2xl font-semibold mb-2">{{.data.TermsAndConditions.IntellectualProperty}}</h2>
+            <p>{{.data.TermsAndConditions.IntellectualPropertyDetails}}</p>
+        </section>
+        <section>
+            <h2 class="text-2xl font-semibold mb-2">{{.data.TermsAndConditions.LimitationOfLiability}}</h2>
+            <p>{{.data.TermsAndConditions.LimitationOfLiabilityDetails}}</p>
+        </section>
+        <section>
+            <h2 class="text-2xl font-semibold mb-2">{{.data.TermsAndConditions.ChangesToTerms}}</h2>
+            <p>{{.data.TermsAndConditions.ChangesToTermsDetails}}</p>
+        </section>
+    </main>
+
+    {{template "footer" .}}
+    <script src="/static/js/menu.js"></script>
+</body>
+</html>
