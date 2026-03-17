@@ -15,8 +15,8 @@ import (
 func main() {
 	cfg := config.Load()
 
-	if _, err := os.Stat("./views"); os.IsNotExist(err) {
-		log.Fatal("views/ directory not found")
+	if _, err := os.Stat(cfg.ViewsDir); os.IsNotExist(err) {
+		log.Fatalf("views/ directory not found at %s", cfg.ViewsDir)
 	}
 
 	r := gin.Default()
@@ -25,8 +25,6 @@ func main() {
 	r.Static("/static", cfg.StaticDir)
 
 	// Build a single template set: partials first, then pages.
-	// Both globs must be parsed into the SAME template.Template so that
-	// page templates can call {{template "footer" .}} etc.
 	funcMap := template.FuncMap{
 		"add":       func(a, b int) int { return a + b },
 		"sub":       func(a, b int) int { return a - b },
@@ -34,8 +32,8 @@ func main() {
 	}
 
 	tmpl := template.New("").Funcs(funcMap)
-	template.Must(tmpl.ParseGlob("./views/partials/*.html"))
-	template.Must(tmpl.ParseGlob("./views/*.html"))
+	template.Must(tmpl.ParseGlob(cfg.ViewsDir + "/partials/*.html"))
+	template.Must(tmpl.ParseGlob(cfg.ViewsDir + "/*.html"))
 	r.SetHTMLTemplate(tmpl)
 
 	// Language middleware
@@ -69,5 +67,8 @@ func main() {
 	r.NoRoute(handlers.NotFound)
 
 	log.Printf("Server running at http://localhost:%s", cfg.Port)
+	log.Printf("ImageDir: %s", cfg.ImageDir)
+	log.Printf("StaticDir: %s", cfg.StaticDir)
+	log.Printf("ViewsDir: %s", cfg.ViewsDir)
 	r.Run("0.0.0.0:" + cfg.Port)
 }
