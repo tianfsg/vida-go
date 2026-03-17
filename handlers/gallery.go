@@ -19,14 +19,14 @@ type Photo struct {
 }
 
 // isValidImage checks if a filename has a supported image extension.
-// Excludes .webp from the base scan to avoid double-listing.
 func isValidImage(filename string) bool {
 	ext := strings.ToLower(filepath.Ext(filename))
-	return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif"
+	return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif" || ext == ".webp"
 }
 
 // loadPhotos scans the image directory and returns Photo objects.
-// offset and limit support pagination for the infinite scroll endpoint.
+// If the file is already a .webp it is served directly as URL (no separate WebP field needed).
+// If it's a JPG/PNG, checks for a .webp sibling and sets the WebP field for the <source> element.
 func loadPhotos(cfg *config.Config, offset, limit int) ([]Photo, error) {
 	files, err := os.ReadDir(cfg.ImageDir)
 	if err != nil {
@@ -41,21 +41,32 @@ func loadPhotos(cfg *config.Config, offset, limit int) ([]Photo, error) {
 			continue
 		}
 
-		// Skip entries before the offset
 		if count < offset {
 			count++
 			continue
 		}
 
 		filename := file.Name()
+		ext := strings.ToLower(filepath.Ext(filename))
 		base := strings.TrimSuffix(filename, filepath.Ext(filename))
-		webpPath := filepath.Join(cfg.ImageDir, base+".webp")
 
-		photo := Photo{
-			URL: "/static/images/data/" + filename,
-		}
-		if _, err := os.Stat(webpPath); err == nil {
-			photo.WebP = "/static/images/data/" + base + ".webp"
+		var photo Photo
+
+		if ext == ".webp" {
+			// Serve webp directly — no JPG fallback needed
+			photo = Photo{
+				URL:  "/static/images/data/" + filename,
+				WebP: "",
+			}
+		} else {
+			// JPG/PNG — check for webp sibling
+			webpPath := filepath.Join(cfg.ImageDir, base+".webp")
+			photo = Photo{
+				URL: "/static/images/data/" + filename,
+			}
+			if _, err := os.Stat(webpPath); err == nil {
+				photo.WebP = "/static/images/data/" + base + ".webp"
+			}
 		}
 
 		photos = append(photos, photo)

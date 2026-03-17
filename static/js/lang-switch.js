@@ -7,7 +7,6 @@
     var menu = document.getElementById("languageMenu");
     if (!menu) return;
     var isHidden = menu.classList.contains("hidden");
-    // Close all first, then open if it was closed
     menu.classList.add("hidden");
     btn.classList.remove("open");
     if (isHidden) {
@@ -18,7 +17,6 @@
 
 
   // ── Close when clicking outside ────────────────────────────────────────────
-  // Uses mousedown (not click) so it doesn't race with the toggle above
   document.addEventListener("mousedown", function (e) {
     var langBtn  = document.getElementById("languageButton");
     var langMenu = document.getElementById("languageMenu");
@@ -62,23 +60,45 @@
     if (menu) menu.classList.add("hidden");
     if (btn)  btn.classList.remove("open");
 
+    var isGallery = !!document.getElementById("photo-container");
+
     fetch(url.toString())
       .then(function (r) { return r.text(); })
       .then(function (html) {
         var parser = new DOMParser();
         var newDoc = parser.parseFromString(html, "text/html");
-        [["main","main"], ["header","header"], ["footer","footer"]].forEach(function (p) {
+
+        if (isGallery) {
+          // Gallery: only swap header and footer — preserve photo container + scroll state
+          var targets = [["header", "header"], ["footer", "footer"]];
+        } else {
+          var targets = [["main", "main"], ["header", "header"], ["footer", "footer"]];
+        }
+
+        targets.forEach(function (p) {
           var o = document.querySelector(p[0]);
           var n = newDoc.querySelector(p[1]);
           if (o && n) o.replaceWith(n);
         });
+
         window.history.pushState({}, "", url.toString());
         if (typeof initCV       === "function") initCV();
         if (typeof initCalendar === "function") initCalendar();
+
+        // Re-render hCaptcha widget after DOM swap — the iframe gets destroyed
+        // when <main> is replaced and hCaptcha does not auto-reinitialise it
+        var captchaEl = document.querySelector(".h-captcha");
+        if (captchaEl && typeof hcaptcha !== "undefined") {
+          captchaEl.innerHTML = "";
+          hcaptcha.render(captchaEl, {
+            sitekey: captchaEl.getAttribute("data-sitekey"),
+            callback: "onCaptchaSuccess"
+          });
+        }
       })
       .catch(function () {
         window.location.href = url.toString();
       });
-  }, true); // capture phase
+  }, true);
 
 })();
