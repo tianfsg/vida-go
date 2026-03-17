@@ -84,6 +84,17 @@
         window.history.pushState({}, "", url.toString());
         if (typeof initCV       === "function") initCV();
         if (typeof initCalendar === "function") initCalendar();
+
+        // Re-render hCaptcha widget after DOM swap — the iframe gets destroyed
+        // when <main> is replaced and hCaptcha does not auto-reinitialise it
+        var captchaEl = document.querySelector(".h-captcha");
+        if (captchaEl && typeof hcaptcha !== "undefined") {
+          captchaEl.innerHTML = "";
+          hcaptcha.render(captchaEl, {
+            sitekey: captchaEl.getAttribute("data-sitekey"),
+            callback: "onCaptchaSuccess"
+          });
+        }
       })
       .catch(function () {
         window.location.href = url.toString();
