@@ -15,22 +15,21 @@ import (
 func main() {
 	cfg := config.Load()
 
-	// Release mode — elimina todos los [GIN-debug] del log
 	gin.SetMode(gin.ReleaseMode)
 
 	if _, err := os.Stat(cfg.ViewsDir); os.IsNotExist(err) {
-		log.Fatalf("views/ directory not found at %s", cfg.ViewsDir)
+		log.Fatalf("[FATAL] views/ not found at: %s", cfg.ViewsDir)
 	}
 
+	log.Printf("[STARTUP] Port:      %s", cfg.Port)
+	log.Printf("[STARTUP] StaticDir: %s", cfg.StaticDir)
+	log.Printf("[STARTUP] ViewsDir:  %s", cfg.ViewsDir)
+	log.Printf("[STARTUP] ImageDir:  %s", cfg.ImageDir)
+
 	r := gin.Default()
-
-	// Solo confiar en localhost (proxy de cPanel)
 	r.SetTrustedProxies([]string{"127.0.0.1"})
-
-	// Static files
 	r.Static("/static", cfg.StaticDir)
 
-	// Templates ANTES de registrar rutas (thread-safe)
 	funcMap := template.FuncMap{
 		"add":       func(a, b int) int { return a + b },
 		"sub":       func(a, b int) int { return a - b },
@@ -41,12 +40,14 @@ func main() {
 	template.Must(tmpl.ParseGlob(cfg.ViewsDir + "/*.html"))
 	r.SetHTMLTemplate(tmpl)
 
-	// Middleware
 	r.Use(middleware.Lang())
 	r.Use(func(c *gin.Context) {
 		c.Request.ParseForm()
 		c.Next()
 	})
+
+	// Health — usado por el watchdog
+	r.GET("/health", handlers.Health)
 
 	// Pages
 	r.GET("/", handlers.Hub)
@@ -69,10 +70,8 @@ func main() {
 	// 404
 	r.NoRoute(handlers.NotFound)
 
-	log.Printf("Server running at http://localhost:%s", cfg.Port)
-	log.Printf("ImageDir: %s", cfg.ImageDir)
-	log.Printf("StaticDir: %s", cfg.StaticDir)
-	log.Printf("ViewsDir: %s", cfg.ViewsDir)
-
-	r.Run("0.0.0.0:" + cfg.Port)
+	log.Printf("[STARTUP] Listening on 0.0.0.0:%s", cfg.Port)
+	if err := r.Run("0.0.0.0:" + cfg.Port); err != nil {
+		log.Fatalf("[FATAL] Server failed to start: %v", err)
+	}
 }
